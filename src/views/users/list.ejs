@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Usuários</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container mt-4">
+        <h1>Lista de Usuários</h1>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Email</th>
+                    <th>Perfil</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (users && users.length > 0) { %>
+                    <% users.forEach(function(user) { %>
+                        <tr>       
+                            <td><%= user.nome %></td>
+                            <td><%= user.cpf %></td>
+                            <td><%= user.email %></td>
+                            <td><%= user.role %></td>
+                            <td>
+                                <a href="/user/<%= user.id %>" class="btn btn-sm btn-info">Ver</a>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="6">Nenhum usuário encontrado.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+
+        <nav aria-label="Paginação de Usuários">
+            <ul class="pagination justify-content-center">
+                <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                    <a class="page-link" href="/users?page=<%= currentPage - 1 %>&limit=<%= limit %>">Anterior</a>
+                </li>
+
+                <% const startPage = Math.max(1, currentPage - 2); %>
+                <% const endPage = Math.min(totalPages, currentPage + 2); %>
+
+                <% for (let i = startPage; i <= endPage; i++) { %>
+                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                        <a class="page-link" href="/users?page=<%= i %>&limit=<%= limit %>"><%= i %></a>
+                    </li>
+                <% } %>
+
+                <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                    <a class="page-link" href="/users?page=<%= currentPage + 1 %>&limit=<%= limit %>">Próxima</a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="container mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <% if (loggedInUser) { %> <%# Verifica se a variável loggedInUser existe (usuário logado) %>
+                    <div>
+                        <a href="/user/<%= loggedInUser.id %>" class="btn btn-primary me-2">Meu Perfil</a>
+    
+                        <a href="/logoff" class="btn btn-danger">Sair</a>
+                    </div>
+                <% } %>
+            </div>
+
+            <p>Total de usuários: <%= totalUsers %></p>
+
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detalhes do Usuário: <%= user.nome %></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/viewUser.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <a href="/users" class="btn btn-secondary mb-3">Voltar para a Lista</a>
+
+        <h1>Detalhes do Usuário: <%= user.nome %></h1>
+
+        <form action="/user/updateUser/<%= user.id %>" method="POST">
+            <input type="hidden" name="userId" value="<%= user.id %>">
+
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Informações Principais</h5>
+
+                    <% if (loggedInUser && (loggedInUser.id === user.id || loggedInUser.role === 'ADMIN')) { %>
+                        <p class="card-text"><strong>CPF:</strong> <span class="non-editable-field"><%= user.cpf %></span></p>
+                    <% } %>
+
+                    <div class="mb-3">
+                        <label for="nome" class="form-label"><strong>Nome:</strong></label>
+                        <input type="text" class="form-control" id="nome" name="nome" value="<%= user.nome %>" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <p class="card-text"><strong>Email (Login/Principal):</strong> <span class="non-editable-field"><%= user.email %></span></p>
+                        <p class="card-text mt-2"><strong>Perfil:</strong> <span class="non-editable-field"><%= user.role %></span></p>
+                    </div>
+
+                    <button type="submit" class="btn btn-success mt-3 me-2">Salvar Alterações</button>
+                    <a href="/user/<%= user.id %>" class="btn btn-secondary mt-3">Cancelar</a>
+
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Telefones</h5>
+                    <% if (telefones && telefones.length > 0) { %>
+                        <ul class="list-group list-group-flush mb-3">
+                            <% telefones.forEach(function(telefone) { %>
+                                <li class="list-group-item list-group-item-flex">
+                                    <span><%= telefone.telefone %></span>
+                                    <div class="action-buttons">
+                                         <div class="form-check form-check-inline principal-checkbox">
+                                            <input class="form-check-input" type="checkbox" id="telefonePrincipal_<%= telefone.id %>" name="principalTelefone" value="<%= telefone.id %>" <%= telefone.principal ? 'checked' : '' %>>
+                                            <label class="form-check-label" for="telefone<%= telefone.id %>">Principal</label>
+                                        </div>
+                                        <button type="submit" form="deleteTelefoneForm_<%= telefone.id %>" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este telefone?');">Excluir</button>
+                                    </div>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    <% } else { %>
+                        <p>Nenhum telefone cadastrado.</p>
+                    <% } %>
+
+                    <div class="mb-3">
+                        <label for="novoTelefone" class="form-label"><strong>Adicionar Novo Telefone:</strong></label>
+                        <input type="tel" class="form-control" id="novoTelefone" name="novoTelefone" placeholder="Novo número de telefone">
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Emails de Contato</h5>
+                    <% if (emails && emails.length > 0) { %>
+                        <ul class="list-group list-group-flush mb-3">
+                            <% emails.forEach(function(email) { %>
+                                <li class="list-group-item list-group-item-flex">
+                                    <span><%= email.email %></span>
+                                     <div class="action-buttons">
+                                        <div class="form-check form-check-inline principal-checkbox">
+                                            <input class="form-check-input" type="checkbox" id="emailPrincipal_<%= email.id %>" name="principalEmail" value="<%= email.id %>" <%= email.principal ? 'checked' : '' %>>
+                                            <label class="form-check-label" for="emailPrincipal_<%= email.id %>">Principal</label>
+                                        </div>
+                                        <button type="submit" form="deleteEmailForm_<%= email.id %>" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este email?');">Excluir</button>
+                                     </div>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    <% } else { %>
+                        <p>Nenhum email de contato cadastrado.</p>
+                    <% } %>
+
+                    <div class="mb-3">
+                        <label for="novoEmail" class="form-label"><strong>Adicionar Novo Email:</strong></label>
+                        <input type="email" class="form-control" id="novoEmail" name="novoEmail" placeholder="Novo endereço de email">
+                    </div>
+
+                </div>
+            </div>
+        </form> 
+
+        <% telefones.forEach(function(telefone) { %>
+            <form id="deleteTelefoneForm_<%= telefone.id %>" action="/deleteTelefone/<%= telefone.id %>" method="POST" style="display:none;"></form>
+        <% }); %>
+         <% emails.forEach(function(email) { %>
+            <form id="deleteEmailForm_<%= email.id %>" action="/deleteEmail/<%= email.id %>" method="POST" style="display:none;"></form>
+        <% }); %>
+
+
+        <form action="/deleteUser/<%= user.id %>" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('Tem certeza que deseja excluir este usuário?');">Excluir Usuário</button>
+        </form>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src ="/js/viewUser.js"></script>
+</body>
+</html>

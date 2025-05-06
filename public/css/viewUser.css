@@ -1,0 +1,27 @@
+ /* Estilo para campos não editáveis */
+ .non-editable-field {
+    padding: .375rem .75rem;
+    background-color: #e9ecef; /* Cor de fundo para indicar não editável */
+    opacity: 1;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    display: inline-block; /* Para aplicar padding e borda corretamente */
+}
+.list-group-item-flex {
+     display: flex;
+     align-items: center;
+     justify-content: space-between; /* Espaça os itens */
+     flex-wrap: wrap; /* Permite quebra de linha em telas pequenas */
+}
+.list-group-item-flex span {
+     flex-grow: 1; /* Permite que o texto do telefone/email ocupe o espaço disponível */
+     margin-right: 10px; /* Espaço entre o texto e os botões/checkbox */
+}
+.principal-checkbox {
+    margin-left: 10px; /* Espaço antes do checkbox Principal */
+}
+.action-buttons {
+     display: flex;
+     align-items: center;
+     gap: 5px; /* Espaço entre os botões de ação */
+}
